@@ -223,7 +223,15 @@ async def webhook():
     return "ok"
 
 
-@app.route("/webhook", methods=["POST"])
+from flask import Flask, request
+
+web_app = Flask(__name__)
+
+@web_app.route("/")
+def home():
+    return "Bot is live"
+
+@web_app.route("/webhook", methods=["POST"])
 async def webhook():
     update = Update.de_json(request.get_json(force=True), app.bot)
     await app.process_update(update)
@@ -232,6 +240,12 @@ async def webhook():
 if __name__ == "__main__":
     print("Starting webhook bot...")
     web_app.run(host="0.0.0.0", port=10000)
+
+
+if __name__ == "__main__":
+    print("Starting webhook bot...")
+    web_app.run(host="0.0.0.0", port=10000)
+
 
 
 
