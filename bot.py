@@ -160,6 +160,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ai_summary = generate_ai_summary(service, budget, timeline, extra)
 
         save_to_csv(username, str(context.user_data))
+        sheet.append_row([
+    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    username,
+    service,
+    budget,
+    timeline,
+    extra
+])
+
 
         alert = f"""
 🚨 New Lead
@@ -218,6 +227,7 @@ if __name__ == "__main__":
         url_path="webhook",
         webhook_url="https://tg-bot-c2j0.onrender.com/webhook"
     )
+
 
 
 
