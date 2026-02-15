@@ -196,9 +196,20 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.add_handler(CommandHandler("start", start))
 
 print("Bot starting clean session...")
+app_web = Flask(__name__)
+
+@app_web.route('/')
+def home():
+    return "Bot is running!"
+
+def run_web():
+    app_web.run(host='0.0.0.0', port=10000)
+
+threading.Thread(target=run_web).start()
 
 app.run_polling(
     drop_pending_updates=True,
     allowed_updates=Update.ALL_TYPES
 )
+
 
