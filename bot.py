@@ -207,23 +207,18 @@ def save_to_csv(username, message):
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.add_handler(CommandHandler("start", start))
-import asyncio
+app = ApplicationBuilder().token(TOKEN).build()
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+app.add_handler(CommandHandler("start", start))
 
-async def main():
-    await app.initialize()
-    await app.start()
-
-    await app.bot.set_webhook("https://tg-bot-c2j0.onrender.com/webhook")
-
-    await app.run_webhook(
+if __name__ == "__main__":
+    app.run_webhook(
         listen="0.0.0.0",
         port=10000,
         url_path="webhook",
         webhook_url="https://tg-bot-c2j0.onrender.com/webhook"
     )
 
-if __name__ == "__main__":
-    asyncio.run(main())
 
 
 
