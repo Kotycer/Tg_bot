@@ -234,9 +234,17 @@ def home():
 @web_app.route("/webhook", methods=["POST"])
 def webhook():
     update = Update.de_json(request.get_json(force=True), app.bot)
-    app.process_update(update)
+
+    import asyncio
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(app.process_update(update))
+    loop.close()
+
     return "ok"
 
+
 if __name__ == "__main__":
     print("Starting webhook bot...")
     web_app.run(host="0.0.0.0", port=10000)
@@ -245,6 +253,7 @@ if __name__ == "__main__":
 if __name__ == "__main__":
     print("Starting webhook bot...")
     web_app.run(host="0.0.0.0", port=10000)
+
 
 
 
