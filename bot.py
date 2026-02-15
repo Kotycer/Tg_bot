@@ -208,24 +208,20 @@ app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.add_handler(CommandHandler("start", start))
 
-app_web = Flask(__name__)
-
-@app_web.route('/')
-def home():
-    return "Bot is running!"
-
-def run_web():
-    app_web.run(host='0.0.0.0', port=10000)
-
-threading.Thread(target=run_web).start()
-
 from flask import Flask, request
 
 web_app = Flask(__name__)
 
-@app.route("/")
+@web_app.route("/")
 def home():
     return "Bot is live"
+
+@web_app.route("/webhook", methods=["POST"])
+async def webhook():
+    update = Update.de_json(request.get_json(force=True), app.bot)
+    await app.process_update(update)
+    return "ok"
+
 
 @app.route("/webhook", methods=["POST"])
 async def webhook():
@@ -236,6 +232,7 @@ async def webhook():
 if __name__ == "__main__":
     print("Starting webhook bot...")
     web_app.run(host="0.0.0.0", port=10000)
+
 
 
 
