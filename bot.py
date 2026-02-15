@@ -20,7 +20,7 @@ credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
 
 client = gspread.authorize(credentials)
 
-sheet = client.open_by_key("YOUR_SHEET_ID").sheet1
+sheet = client.open_by_key("11IcuJfVklDJyGYyp5mJS3WlCGYbH3ooO51RUcTbnvPI").sheet1
 
 
 
@@ -224,6 +224,7 @@ app.run_polling(
     drop_pending_updates=True,
     allowed_updates=Update.ALL_TYPES
 )
+
 
 
 
