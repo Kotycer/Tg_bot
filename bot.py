@@ -208,7 +208,6 @@ app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.add_handler(CommandHandler("start", start))
 
-print("Bot starting clean session...")
 app_web = Flask(__name__)
 
 @app_web.route('/')
@@ -220,10 +219,25 @@ def run_web():
 
 threading.Thread(target=run_web).start()
 
-app.run_polling(
-    drop_pending_updates=True,
-    allowed_updates=Update.ALL_TYPES
-)
+from flask import Flask, request
+
+web_app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Bot is live"
+
+@app.route("/webhook", methods=["POST"])
+async def webhook():
+    update = Update.de_json(request.get_json(force=True), app.bot)
+    await app.process_update(update)
+    return "ok"
+
+if __name__ == "__main__":
+    print("Starting webhook bot...")
+    web_app.run(host="0.0.0.0", port=10000)
+
+
 
 
 
