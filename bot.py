@@ -209,11 +209,21 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.add_handler(CommandHandler("start", start))
 import asyncio
 
-async def init_app():
+async def main():
     await app.initialize()
     await app.start()
 
-asyncio.run(init_app())
+    await app.bot.set_webhook("https://tg-bot-c2j0.onrender.com/webhook")
+
+    await app.run_webhook(
+        listen="0.0.0.0",
+        port=10000,
+        url_path="webhook",
+        webhook_url="https://tg-bot-c2j0.onrender.com/webhook"
+    )
+
+if __name__ == "__main__":
+    asyncio.run(main())
 
 
 from flask import Flask, request
@@ -235,32 +245,6 @@ from flask import Flask, request
 
 web_app = Flask(__name__)
 
-@web_app.route("/")
-def home():
-    return "Bot is live"
-
-@web_app.route("/webhook", methods=["POST"])
-def webhook():
-    update = Update.de_json(request.get_json(force=True), app.bot)
-
-    import asyncio
-
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(app.process_update(update))
-    loop.close()
-
-    return "ok"
-
-
-if __name__ == "__main__":
-    print("Starting webhook bot...")
-    web_app.run(host="0.0.0.0", port=10000)
-
-
-if __name__ == "__main__":
-    print("Starting webhook bot...")
-    web_app.run(host="0.0.0.0", port=10000)
 
 
 
