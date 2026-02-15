@@ -207,6 +207,14 @@ def save_to_csv(username, message):
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 app.add_handler(CommandHandler("start", start))
+import asyncio
+
+async def init_app():
+    await app.initialize()
+    await app.start()
+
+asyncio.run(init_app())
+
 
 from flask import Flask, request
 
@@ -253,6 +261,7 @@ if __name__ == "__main__":
 if __name__ == "__main__":
     print("Starting webhook bot...")
     web_app.run(host="0.0.0.0", port=10000)
+
 
 
 
