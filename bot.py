@@ -9,6 +9,19 @@ from dotenv import load_dotenv
 from groq import Groq
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
+import gspread
+from google.oauth2.service_account import Credentials
+import json
+
+creds_dict = json.loads(os.getenv("GOOGLE_CREDS"))
+
+scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+
+client = gspread.authorize(credentials)
+
+sheet = client.open_by_key("YOUR_SHEET_ID").sheet1
+
 
 
 load_dotenv()
@@ -211,5 +224,6 @@ app.run_polling(
     drop_pending_updates=True,
     allowed_updates=Update.ALL_TYPES
 )
+
 
 
