@@ -13,15 +13,6 @@ import gspread
 from google.oauth2.service_account import Credentials
 import json
 
-creds_dict = json.loads(os.getenv("GOOGLE_CREDS"))
-
-scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
-
-client = gspread.authorize(credentials)
-
-sheet = client.open_by_key("11IcuJfVklDJyGYyp5mJS3WlCGYbH3ooO51RUcTbnvPI").sheet1
-
 
 
 load_dotenv()
@@ -30,6 +21,15 @@ TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 GROQ_API_KEY = Groq(api_key= os.getenv("GROQ_API_KEY"))
 ADMIN_ID = os.getenv("ADMIN_ID")
 
+
+creds_dict = json.loads(os.getenv("GOOGLE_CREDS"))
+
+scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
+
+client = gspread.authorize(credentials)
+
+sheet = client.open_by_key("11IcuJfVklDJyGYyp5mJS3WlCGYbH3ooO51RUcTbnvPI").sheet1
 
 
 
@@ -226,24 +226,6 @@ if __name__ == "__main__":
     asyncio.run(main())
 
 
-from flask import Flask, request
-
-web_app = Flask(__name__)
-
-@web_app.route("/")
-def home():
-    return "Bot is live"
-
-@web_app.route("/webhook", methods=["POST"])
-async def webhook():
-    update = Update.de_json(request.get_json(force=True), app.bot)
-    await app.process_update(update)
-    return "ok"
-
-
-from flask import Flask, request
-
-web_app = Flask(__name__)
 
 
 
