@@ -1,6 +1,7 @@
-python-telegram-bot
+python-telegram-bot[webhooks]
 python-dotenv
 groq
 gspread
 google-auth
 flask
+
